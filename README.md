@@ -4,8 +4,9 @@ A simple C thread pool implementation
 =====================================
 
 Currently, the implementation:
- * Works with pthreads only, but API is intentionally opaque to allow
-   other implementations (Windows for instance).
+ * ~~Works with pthreads only, but API is intentionally opaque to allow
+   other implementations (Windows for instance).~~
+ * Based on [tinycthread](https://github.com/tinycthread/tinycthread), provided Windows/Linux/macOS supports.
  * Starts all threads on creation of the thread pool.
  * Reserves one task for signaling the queue is full.
  * Stops and joins all worker threads on destroy.
@@ -20,5 +21,5 @@ some additional options:
  * Reduce number of threads automatically (hard)
  * Unlimited queue size (medium)
  * Kill worker threads on destroy (hard, dangerous)
- * Support Windows API (medium)
+ * ~~Support Windows API (medium)~~
  * Reduce locking contention (medium/hard)

@@ -2,3 +2,7 @@
 *.a
 *.o
 *~
+build
+cmake-build-*
+.idea
+*.iml
