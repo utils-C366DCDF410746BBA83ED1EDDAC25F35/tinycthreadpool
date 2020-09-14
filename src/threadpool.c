@@ -124,8 +124,8 @@ threadpool_t *threadpool_create(int thread_count, int queue_size, int flags)
         (sizeof(threadpool_task_t) * queue_size);
 
     /* Initialize mutex and conditional variable first */
-    if((mtx_init(&(pool->lock), NULL) != 0) ||
-       (cnd_init(&(pool->notify)) != 0) ||
+    if((mtx_init(&(pool->lock), NULL) != thrd_success) ||
+       (cnd_init(&(pool->notify)) != thrd_success) ||
        (pool->threads == NULL) ||
        (pool->queue == NULL)) {
         goto err;
@@ -133,7 +133,7 @@ threadpool_t *threadpool_create(int thread_count, int queue_size, int flags)
 
     /* Start worker threads */
     for(i = 0; i < thread_count; i++) {
-        if(thrd_create(&(pool->threads[i]), threadpool_thread, (void*)pool) != 0) {
+        if(thrd_create(&(pool->threads[i]), threadpool_thread, (void*)pool) != thrd_success) {
             threadpool_destroy(pool, 0);
             return NULL;
         }
@@ -161,7 +161,7 @@ int threadpool_add(threadpool_t *pool, void (*function)(void *),
         return threadpool_invalid;
     }
 
-    if(mtx_lock(&(pool->lock)) != 0) {
+    if(mtx_lock(&(pool->lock)) != thrd_success) {
         return threadpool_lock_failure;
     }
 
@@ -187,13 +187,13 @@ int threadpool_add(threadpool_t *pool, void (*function)(void *),
         pool->count += 1;
 
         /* pthread_cond_broadcast */
-        if(cnd_signal(&(pool->notify)) != 0) {
+        if(cnd_signal(&(pool->notify)) != thrd_success) {
             err = threadpool_lock_failure;
             break;
         }
     } while(0);
 
-    if(mtx_unlock(&pool->lock) != 0) {
+    if(mtx_unlock(&pool->lock) != thrd_success) {
         err = threadpool_lock_failure;
     }
 
@@ -208,7 +208,7 @@ int threadpool_destroy(threadpool_t *pool, int flags)
         return threadpool_invalid;
     }
 
-    if(mtx_lock(&(pool->lock)) != 0) {
+    if(mtx_lock(&(pool->lock)) != thrd_success) {
         return threadpool_lock_failure;
     }
 
@@ -223,15 +223,15 @@ int threadpool_destroy(threadpool_t *pool, int flags)
             graceful_shutdown : immediate_shutdown;
 
         /* Wake up all worker threads */
-        if((cnd_broadcast(&(pool->notify)) != 0) ||
-           (mtx_unlock(&(pool->lock)) != 0)) {
+        if((cnd_broadcast(&(pool->notify)) != thrd_success) ||
+           (mtx_unlock(&(pool->lock)) != thrd_success)) {
             err = threadpool_lock_failure;
             break;
         }
 
         /* Join all worker thread */
         for(i = 0; i < pool->thread_count; i++) {
-            if(thrd_join(pool->threads[i], NULL) != 0) {
+            if(thrd_join(pool->threads[i], NULL) != thrd_success) {
                 err = threadpool_thread_failure;
             }
         }
