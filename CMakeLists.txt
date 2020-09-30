@@ -7,4 +7,4 @@ add_subdirectory(test_package)
 
 add_executable(test main.c)
 
-target_link_libraries(test threadpool)
+target_link_libraries(test tinycthreadpool)

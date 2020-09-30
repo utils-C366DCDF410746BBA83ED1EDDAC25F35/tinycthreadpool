@@ -1,9 +1,9 @@
-from conans import ConanFile, CMake
+from conans import ConanFile, CMake, tools
 
 
 class ThreadpoolConan(ConanFile):
     name = "tinycthreadpool"
-    version = "0.1"
+    version = "1.0"
     license = "https://github.com/mbrossard/threadpool/blob/master/LICENSE"
     author = "Mathias Brossard"
     url = "https://github.com/mbrossard/threadpool"
@@ -34,4 +34,4 @@ class ThreadpoolConan(ConanFile):
         self.copy("*.a", dst="lib", keep_path=False)
 
     def package_info(self):
-        self.cpp_info.libs = ["hello"]
+        self.cpp_info.libs = tools.collect_libs(self)

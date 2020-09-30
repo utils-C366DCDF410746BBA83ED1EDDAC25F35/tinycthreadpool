@@ -27,6 +27,9 @@ int main(void) {
         printf("Add task result: %d\n", result);
     }
 
+    sleep(100000);
 
+
+    threadpool_destroy(threadpool, threadpool_graceful);
     return 0;
 }
