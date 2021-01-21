@@ -1,15 +1,44 @@
-[![Build Status](https://travis-ci.org/mbrossard/threadpool.svg?branch=master)](https://travis-ci.org/mbrossard/threadpool)
+# A simple C thread pool implementation
 
-A simple C thread pool implementation
-=====================================
+**UPDATE: I have replaced the original pthread with [tinycthread](https://github.com/tinycthread/tinycthread), so it's working on both Windows and POSIX systems.**
 
 Currently, the implementation:
- * ~~Works with pthreads only, but API is intentionally opaque to allow
-   other implementations (Windows for instance).~~
- * Based on [tinycthread](https://github.com/tinycthread/tinycthread), provided Windows/Linux/macOS supports.
+ * ~~Works with pthreads only, but API is intentionally opaque to allow other implementations (Windows for instance).~~
+ * [New] Based on [tinycthread](https://github.com/tinycthread/tinycthread), provided Windows/Linux/macOS supports.
  * Starts all threads on creation of the thread pool.
  * Reserves one task for signaling the queue is full.
  * Stops and joins all worker threads on destroy.
+
+## How to Use
+
+You can use the source code in your project directly. 
+
+But it becomes more easily to use conan. 
+
+1. Install conan first according to this [reference](https://docs.conan.io/en/latest/installation.html).
+2. I have publish this lib to my own repo, so set up remote first:
+
+   ```
+   conan remote add bennyhuo https://api.bintray.com/conan/bennyhuo/conan-bennyhuo
+   ```
+
+3. add it to your conan.txt:
+
+   ```
+   [requires]
+   ...
+   tinycthreadpool/1.0@bennyhuo/testing
+
+   ```
+
+4. At last, install or build the lib with conan automatically.
+
+   ```
+   conan install <path to conan.txt> --build=missing
+   ```
+
+Enjoy!
+
 
 Possible enhancements
 =====================
