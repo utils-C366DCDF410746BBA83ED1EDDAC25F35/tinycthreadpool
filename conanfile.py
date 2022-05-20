@@ -3,7 +3,7 @@ from conans import ConanFile, CMake, tools
 
 class ThreadpoolConan(ConanFile):
     name = "tinycthreadpool"
-    version = "1.0"
+    version = "1.0.0"
     license = "https://github.com/mbrossard/threadpool/blob/master/LICENSE"
     author = "Mathias Brossard"
     url = "https://github.com/mbrossard/threadpool"
